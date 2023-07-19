@@ -17,7 +17,11 @@ export class AuthProvider {
     this.http.post("auth/login", credentials)
       .subscribe((data: any) => {
         this.storage.set('token', data.token);
-      });
+      },
+      error => {
+        console.log(error);
+      }
+      );
   }
 
   userIsLogged() {
