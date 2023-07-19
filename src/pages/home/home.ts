@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
-import { HttpClient } from '@angular/common/http';
 
 import { TestPage } from '../test/test';
 import 'rxjs/add/operator/map';
+import { HttpServiceProvider } from '../../providers/http-service/http-service';
 
 @Component({
   selector: 'page-home',
@@ -11,18 +11,16 @@ import 'rxjs/add/operator/map';
 })
 export class HomePage {
 
-  private url = "http://192.168.129.12:3030/v1";
   public beers: Array<{}>;
 
   constructor(
     public navCtrl: NavController,
-    public http: HttpClient
+    public http: HttpServiceProvider
     ) {
-      this.http.get(this.url + '/beers')
-               .map(res => JSON.stringify(res))
-               .subscribe(data => {
-                  this.beers = JSON.parse(data)
-              });
+      this.http.getAll('beers')
+        .subscribe((data: any) => {
+          this.beers = data;
+        });
   }
 
   goToTestPage(): void{
@@ -32,7 +30,6 @@ export class HomePage {
   loadBeer(id: number): void{
     this.navCtrl.push(TestPage, {
       'beer_id': id,
-      'api_url': this.url
     });
   }
 

@@ -1,15 +1,14 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { Camera, CameraOptions } from '@ionic-native/camera';
+import { ToastController } from 'ionic-angular';
+import { HttpServiceProvider } from '../../providers/http-service/http-service';
 
 @Component({
   selector: 'page-list',
   templateUrl: 'list.html'
 })
 export class ListPage {
-
-  private url = "http://192.168.129.12:3030/v1";
 
   public beer = {
     name: "", 
@@ -22,19 +21,22 @@ export class ListPage {
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
-    public http: HttpClient,
-    public camera: Camera
+    public http: HttpServiceProvider,
+    public camera: Camera,
+    public toastCtrl: ToastController
     ) {
 
   }
 
   saveBeer(beer): void{
-    const options = {
-      headers: new HttpHeaders().append('Content-Type', 'application/json')
-    }
-    
-    this.http.post(this.url + '/beers', beer, options)
-              .map(res => console.log(res)).subscribe();
+    this.http.post('beers', beer)
+      .subscribe(() => {
+        let toast = this.toastCtrl.create({
+          message: 'Cerveja adicionada com sucesso',
+          duration: 3000
+        });
+        toast.present();
+      });
   }
 
   getPhoto(): void{
