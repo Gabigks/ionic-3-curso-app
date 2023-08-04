@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class HttpServiceProvider {
 
-  private url = "http://192.168.129.12:3030/v1";
+  private url = "http://localhost:3030/v1";
 
   constructor(public http: HttpClient) {
     console.log('Hello HttpServiceProvider Provider');
